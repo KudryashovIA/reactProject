@@ -1,23 +1,22 @@
 require('dotenv').config();
 const express = require('express');
 const { Pool } = require('pg');
-const path = require('path');
 const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;  // Render сам задаст PORT (обычно 10000)
 
 // Middleware
-app.use(cors({ origin: '*' }));
+app.use(cors({ origin: '*' }));  // ← для продакшена лучше указать конкретный домен фронта
 app.use(express.json());
 
-// Логирование запросов
+// Логирование всех запросов (полезно в Render Logs)
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
   next();
 });
 
-// Отключаем кэширование для API
+// Отключаем кэширование API-ответов
 app.use('/api', (req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
   res.setHeader('Pragma', 'no-cache');
@@ -25,51 +24,53 @@ app.use('/api', (req, res, next) => {
   next();
 });
 
-// Подключение к PostgreSQL (для Render — используем DATABASE_URL)
+// Подключение к PostgreSQL (Render-стиль)
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // обязательно для Render
+    rejectUnauthorized: false,  // обязательно на Render, иначе SSL ошибка
   },
-  // Настройки пула (можно подстроить под нагрузку)
-  max: 20,                    // максимум соединений
-  idleTimeoutMillis: 30000,   // закрывать неактивные через 30 сек
-  connectionTimeoutMillis: 5000, // ждать подключения не дольше 5 сек
+  // Полезные настройки пула
+  max: 20,                       // максимум соединений (подбери под тариф БД)
+  idleTimeoutMillis: 30000,      // закрывать idle через 30 сек
+  connectionTimeoutMillis: 5000, // таймаут подключения
 });
 
-// Логируем события пула
+// События пула для отладки
 pool.on('connect', () => {
-  console.log('→ Подключение к PostgreSQL установлено');
+  console.log('→ PostgreSQL: новое подключение установлено');
 });
 
 pool.on('error', (err, client) => {
   console.error('Ошибка в пуле PostgreSQL:', err.stack);
 });
 
-// Проверка подключения при запуске сервера
+// Проверка подключения к БД при запуске (очень важно!)
 (async () => {
   let client;
   try {
     client = await pool.connect();
-    console.log('PostgreSQL → успешно подключено');
-    // Можно выполнить тестовый запрос, если хочется
+    console.log('PostgreSQL → успешно подключено и готово к работе');
+    // Опционально: тестовый запрос
     // await client.query('SELECT NOW()');
   } catch (err) {
-    console.error('!!! НЕ УДАЛОСЬ ПОДКЛЮЧИТЬСЯ К БАЗЕ ДАННЫХ !!!');
+    console.error('!!! КРИТИЧЕСКАЯ ОШИБКА: НЕ УДАЛОСЬ ПОДКЛЮЧИТЬСЯ К БАЗЕ ДАННЫХ !!!');
     console.error(err.message);
-    process.exit(1); // завершаем процесс, если база недоступна
+    process.exit(1);  // Завершаем процесс, Render покажет failed deploy
   } finally {
     if (client) client.release();
   }
 
-  // Запускаем сервер только после успешной проверки
-  app.listen(PORT, () => {
-    console.log(`Сервер запущен на порту ${PORT}`);
+  // Запускаем сервер ТОЛЬКО после успешной проверки БД
+  app.listen(PORT, '0.0.0.0', () => {  // ← 0.0.0.0 обязательно для Render!
+    console.log(`Сервер запущен на http://0.0.0.0:${PORT}`);
     console.log(`Режим: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`DATABASE_URL используется: ${!!process.env.DATABASE_URL}`);
   });
 })();
 
-// Эндпоинты
+// ------------------ Эндпоинты ------------------
+
 app.get('/api/electronics', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -86,7 +87,7 @@ app.get('/api/electronics', async (req, res) => {
 
 app.get('/api/electronics/:id', async (req, res) => {
   const id = parseInt(req.params.id);
-  console.log(`→ Запрос к /api/electronics/${id}`);
+  console.log(`→ Запрос детали /api/electronics/${id}`);
 
   try {
     const compRes = await pool.query(
@@ -117,7 +118,7 @@ app.get('/api/electronics/:id', async (req, res) => {
 });
 
 app.get('/api/mechanics', async (req, res) => {
-  console.log('→ Запрос к /api/mechanics');
+  console.log('→ Запрос /api/mechanics');
   try {
     const result = await pool.query(`
       SELECT id, name_detail, description, photo, stl, m3d
@@ -131,15 +132,14 @@ app.get('/api/mechanics', async (req, res) => {
   }
 });
 
-// Раздача фронтенда (Vite/React и т.п.)
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-// SPA fallback — все остальные пути отдаём index.html
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'), (err) => {
-    if (err) {
-      console.error('Ошибка отдачи index.html:', err);
-      res.status(500).json({ error: 'Ошибка сервера' });
-    }
-  });
+// Опционально: health-check эндпоинт (Render иногда использует для проверки)
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', uptime: process.uptime() });
 });
+
+// 404 для неизвестных путей (API-only)
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
+// Запуск сервера уже внутри async-блока выше
