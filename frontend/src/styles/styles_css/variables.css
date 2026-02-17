@@ -1,0 +1,12 @@
+:root {
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  --color-gray: #ffffff;
+  --box-shadow: 8px 8px 15px -2px rgba(0, 0, 0, 0.3),-8px -8px 15px -2px rgba(0, 0, 0, 0.3);
+  --color-gradient-button: linear-gradient(180deg, rgba(204, 188, 251, 1) 0%, rgba(237, 237, 237, 1) 36%, #ededed 47%, rgba(237, 237, 237, 1) 57%, rgba(204, 188, 251, 1) 97%);
+  --font-size-desktop: 24px;
+  --font-size-desktop-bold: 28px;
+  --color-gradient: radial-gradient(at 70.8360916719729% 74.57762924670668%, hsla(118.82352941176471, 73.91304347826087%, 72.94117647058825%, 1) 0%, hsla(118.82352941176471, 73.91304347826087%, 72.94117647058825%, 0) 100%), radial-gradient(at 25.43974877503882% 94.25910651945678%, hsla(208.82352941176472, 73.91304347826087%, 72.94117647058825%, 1) 0%, hsla(208.82352941176472, 73.91304347826087%, 72.94117647058825%, 0) 100%), radial-gradient(at 88.51079274950287% 78.43712862707875%, hsla(298.8235294117647, 73.91304347826087%, 72.94117647058825%, 1) 0%, hsla(298.8235294117647, 73.91304347826087%, 72.94117647058825%, 0) 100%);
+  --color-backlink: linear-gradient(90deg, #8c11fa,#00f7ff);
+  --box-shadow-blue: 5px 5px 20px -1px rgb(89, 241, 246),-5px -5px 20px -1px rgb(78, 253, 139);
+}/*# sourceMappingURL=variables.css.map */

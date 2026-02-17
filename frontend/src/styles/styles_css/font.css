@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "tt-b";
+  src: url("../fonts/TTTRAVELS-BOLD.woff2") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+@font-face {
+  font-family: "tt-r";
+  src: url("../fonts/TTTRAVELS-REGULAR.woff2") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}/*# sourceMappingURL=font.css.map */

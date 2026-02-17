@@ -1,0 +1,104 @@
+.catalog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+}
+
+.electronic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.electronic__container {
+  display: flex;
+  border-radius: 30px;
+  border: 2px solid var(--color-black);
+  flex-direction: column;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 50px;
+  box-shadow: var(--box-shadow);
+  transition: background-color 0.5s ease, width 0.7s ease-in;
+}
+.electronic__container:hover {
+  background-color: #d1d1d1;
+  opacity: 90%;
+}
+.electronic__title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: tt-b;
+  font-size: var(--font-size-desktop-bold);
+}
+.electronic__card {
+  width: 520px;
+  height: 450px;
+  flex-direction: column;
+  text-decoration: none;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.electronic__img {
+  width: 500px;
+  height: 350px;
+  background-image: url(/images/electronic/electronic.png);
+  background-size: cover;
+  background-position: center;
+}
+.electronic__text {
+  font-family: tt-r;
+  font-size: var(--font-size-desktop);
+  color: var(--color-black);
+  text-align: center;
+}
+
+.mechanic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mechanic__container {
+  display: flex;
+  border-radius: 30px;
+  border: 2px solid var(--color-black);
+  flex-direction: column;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 50px;
+  box-shadow: var(--box-shadow);
+  transition: background-color 0.5s ease, width 0.7s ease-in;
+}
+.mechanic__container:hover {
+  background-color: #d1d1d1;
+  opacity: 90%;
+}
+.mechanic__title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: tt-b;
+  font-size: var(--font-size-desktop-bold);
+}
+.mechanic__card {
+  width: 520px;
+  height: 450px;
+  flex-direction: column;
+  text-decoration: none;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.mechanic__img {
+  width: 500px;
+  height: 350px;
+  background-image: url(/images/mechanical/mechanics.png);
+  background-size: cover;
+  background-position: center;
+}
+.mechanic__text {
+  font-family: tt-r;
+  font-size: var(--font-size-desktop);
+  color: var(--color-black);
+  text-align: center;
+}/*# sourceMappingURL=home.css.map */

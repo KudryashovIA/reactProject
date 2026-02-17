@@ -1,0 +1,25 @@
+.modal-links {
+  display: flex;
+}
+
+.download-btn {
+  width: 150px;
+  height: 40px;
+  background-image: var(--color-gradient);
+  padding: 0.5rem;
+  text-align: center;
+  border-radius: 20px;
+  text-decoration: none;
+  color: var(--color-black);
+  margin-right: 70px;
+  box-shadow: 0 0 0 white;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.download-btn:last-child {
+  margin-right: 0px;
+}
+
+.download-btn:hover {
+  box-shadow: var(--box-shadow-blue);
+}/*# sourceMappingURL=modaldetailmechanic.css.map */
