@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import axios from "axios"
-import ScrollToTop from "../components/scrollButton"
+import ScrollToTop from "../components/ScrollButton"
 import ModalDetailElectronic from "../components/ModalDetailElectronic"
 
 const ElectronicsDetail = () => {

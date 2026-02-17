@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
 import axios from "axios";
-import ScrollToTop from "../components/scrollButton";
+import ScrollToTop from "../components/ScrollButton";
 
 const Electronics = () => {
 const [components, setComponents] = useState([])
